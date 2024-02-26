@@ -147,3 +147,10 @@ body {
 .other {
   background-color: var(--other);
 }
+
+
+@media screen and (max-width: 500px) {
+  .display {
+    font-size: 3vh;
+  }
+}
