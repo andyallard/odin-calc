@@ -12,6 +12,9 @@ function multiply(a, b) {
 function divide(a, b) {
     return a / b;
 }
+function exponent(a, b) {
+    return a ** b;
+}
 
 function operate(a, b, operator) {
     switch (operator) {
@@ -23,13 +26,41 @@ function operate(a, b, operator) {
             return multiply(a, b);
         case '/':
             return divide(a, b);
+        case 'EXP':
+            return exponent(a, b);
     }
 }
 
-function drawCalc() {
+function setupQuerySelectors() {
+    let numbers = document.querySelectorAll('.button');
     
+    numbers.forEach((button) => {
+        button.addEventListener('click', handleButtonPress);
+    })
 }
 
-let a;
-let b;
-let operator;
+function handleButtonPress(event) {
+    classes = Array.from(event.target.classList);
+    console.log(classes);
+
+    switch (true) {
+        case classes.includes('number'):
+
+            break;
+        case classes.includes('operator'):
+
+            break;
+    }
+
+    keystroke = event.target.textContent;
+    console.log(`${keystroke} button pressed`);
+
+}
+
+let a = b = operator = null;
+
+let display = document.querySelector('.display');
+display.textContent = 0;
+
+setupQuerySelectors();
+

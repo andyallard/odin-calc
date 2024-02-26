@@ -117,12 +117,13 @@ body {
     "MONO" 1;
 }
 
+
 .button:hover {
   opacity: 0.6;
 }
 
 .button.wide {
-  flex: 2;
+  flex: 2.75;
 }
 
 .number {
