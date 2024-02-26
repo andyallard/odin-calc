@@ -150,6 +150,12 @@ body {
 
 
 @media screen and (max-width: 500px) {
+  .display, .button {
+    font-size: 4vh;
+  }
+}
+
+@media screen and (max-width: 375px) {
   .display {
     font-size: 3vh;
   }

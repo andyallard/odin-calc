@@ -17,6 +17,8 @@ function exponent(a, b) {
 }
 
 function operate(a, b, operator) {
+    a = parseFloat(a);
+    b = parseFloat(b);
     switch (operator) {
         case '+':
             return add(a, b);
@@ -55,32 +57,33 @@ function debounce(func, delay) {
 
 const handleButtonPress = debounce(function(event) {
     classes = Array.from(event.target.classList);
-    console.log(classes);
     keystroke = event.target.textContent;
-    console.log(`${keystroke} button pressed`);
+    console.log(classes);
+
+    console.log(`Before "${keystroke}" button pressed. A = ${A} B = ${B} Oper = ${OPERATOR} `);
 
     switch (true) {
         case classes.includes('number'):
             handleNumberPress(keystroke);
             break;
         case classes.includes('operator'):
-
+            handleOperatorPress(keystroke);
             break;
         case classes.includes('clear'):
             clearScreen();
             break;
         case classes.includes('equals'):
-
+            handleEqualsPress();
             break;
         case classes.includes('sign-change'):
             handleSignChange();
             break;
     }
-}, 100);
 
-function handleSignChange() {
-    DISPLAY.textContent = parseFloat(DISPLAY.textContent) * -1;
-}
+    console.log(`After "${keystroke}" button pressed. A = ${A} B = ${B} Oper = ${OPERATOR} `);
+
+
+}, 100);
 
 function handleNumberPress(keystroke) {
     // can't have multiple decimal places
@@ -94,14 +97,55 @@ function handleNumberPress(keystroke) {
     } else {
         DISPLAY.textContent += keystroke;
     }
+
+    if (ENTERING_FIRST_VALUE) {
+        A = DISPLAY.textContent;
+    } else {
+        B = DISPLAY.textContent;
+    }
+}
+
+function handleOperatorPress(keystroke) {
+    if (ENTERING_FIRST_VALUE) {
+        OPERATOR = keystroke;
+        ENTERING_FIRST_VALUE = false;
+        DISPLAY.textContent = 0;
+    } else {
+        A = operate(A, B, OPERATOR);
+        B = null
+        OPERATOR = keystroke;
+        DISPLAY.textContent = A;
+    }
 }
 
 function clearScreen() {
     DISPLAY.textContent = '0';
     A = B = OPERATOR = null;
+    ENTERING_FIRST_VALUE = true;
+}
+
+function handleEqualsPress() {
+    if (!ENTERING_FIRST_VALUE) {
+        A = operate(A, B, OPERATOR);
+        B = null
+        OPERATOR = null;
+        DISPLAY.textContent = A;
+        ENTERING_FIRST_VALUE = true;
+    }
+}
+
+function handleSignChange() {
+    DISPLAY.textContent = parseFloat(DISPLAY.textContent) * -1;
+    
+    if (ENTERING_FIRST_VALUE) {
+        A = DISPLAY.textContent;
+    } else {
+        B = DISPLAY.textContent;
+    }
 }
 
 let A = B = OPERATOR = null;
+let ENTERING_FIRST_VALUE = true;
 
 let DISPLAY = document.querySelector('.display');
 DISPLAY.textContent = 0;
