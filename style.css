@@ -34,12 +34,10 @@ body {
   max-height: 720px;
 }
 
-.display {
-  flex: 1;
-
+.displays {
   display: flex;
-  align-items: center;
-  justify-content: flex-end;
+  flex-flow: column;
+
 
   background-color: #eee;
   border: 2px solid grey;
@@ -48,12 +46,26 @@ body {
   padding: 0px 10px;
   box-shadow: inset 5px 5px 8px #D4D6D9,
               inset -5px -5px 8px #FFF;
+}
+
+.display {
+  flex: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  min-height: 6vh;
 
   font-size: 5vh;
   font-family: "Orbitron", sans-serif;
   font-optical-sizing: auto;
   font-weight: 300;
   font-style: normal;
+}
+
+.aux {
+  color: #999;
 }
 
 .vertical {
@@ -150,13 +162,24 @@ body {
 
 
 @media screen and (max-width: 500px) {
-  .display, .button {
+  .button {
     font-size: 4vh;
+  }
+
+  .display {
+    font-size: 4vh;
+    min-height: 5vh;
   }
 }
 
 @media screen and (max-width: 375px) {
-  .display {
-    font-size: 3vh;
+  .button {
+    font-size: 4vh;
   }
+
+  .display {
+    font-size: 4vh;
+    min-height: 5vh;
+  }
+}
 }

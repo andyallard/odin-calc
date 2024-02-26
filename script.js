@@ -60,7 +60,7 @@ const handleButtonPress = debounce(function(event) {
     keystroke = event.target.textContent;
     console.log(classes);
 
-    console.log(`Before "${keystroke}" button pressed. A = ${A} B = ${B} Oper = ${OPERATOR} `);
+    console.log(`Before "${keystroke}" button pressed. A = ${A} B = ${B} Oper = ${OPERATOR}, ENTERING_FIRST? ${ENTERING_FIRST_VALUE}`);
 
     switch (true) {
         case classes.includes('number'):
@@ -80,8 +80,13 @@ const handleButtonPress = debounce(function(event) {
             break;
     }
 
-    console.log(`After "${keystroke}" button pressed. A = ${A} B = ${B} Oper = ${OPERATOR} `);
+    console.log(`After "${keystroke}" button pressed. A = ${A} B = ${B} Oper = ${OPERATOR}, ENTERING_FIRST? ${ENTERING_FIRST_VALUE}`);
 
+    if (ENTERING_FIRST_VALUE) {
+        AUX.textContent = ``
+    } else {
+        AUX.textContent = `${A} ${OPERATOR}`
+    }
 
 }, 100);
 
@@ -111,10 +116,11 @@ function handleOperatorPress(keystroke) {
         ENTERING_FIRST_VALUE = false;
         DISPLAY.textContent = 0;
     } else {
-        A = operate(A, B, OPERATOR);
+        if (B) {A = operate(A, B, OPERATOR);}
+        
         B = null
         OPERATOR = keystroke;
-        DISPLAY.textContent = A;
+        DISPLAY.textContent = 0;
     }
 }
 
@@ -147,8 +153,11 @@ function handleSignChange() {
 let A = B = OPERATOR = null;
 let ENTERING_FIRST_VALUE = true;
 
-let DISPLAY = document.querySelector('.display');
+let DISPLAY = document.querySelector('.display.main');
+let AUX = document.querySelector('.display.aux');
+
 DISPLAY.textContent = 0;
+AUX.textContent = '';
 
 setupQuerySelectors();
 
