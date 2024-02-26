@@ -1,0 +1,148 @@
+:root {
+  --background: #2C302E;
+  --warning: #D62839;
+  --other: #EDAFB8;
+  --operators: #7D8E85;
+  --numbers: #B0C4B1;
+  --light: #DEDBD2;
+  --equals: #4a5759;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: roboto;
+}
+
+body {
+  margin: 0;
+  background-color: #222;
+}
+
+.calculator {
+  flex: 1;
+
+  display: flex;
+  flex-flow: column;
+
+  border-radius: 10px;
+  margin: auto;
+  padding: 15px;
+  background-color: var(--light);
+  max-width: 480px;
+
+  height: 100vh;
+  max-height: 720px;
+}
+
+.display {
+  flex: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  background-color: #eee;
+  border: 2px solid grey;
+  margin: 5px;
+  margin-bottom: 15px;
+  padding: 0px 10px;
+  box-shadow: inset 5px 5px 8px #D4D6D9,
+              inset -5px -5px 8px #FFF;
+
+  font-size: 5vh;
+  font-family: "Orbitron", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.vertical {
+  flex: 3;
+  display: flex;
+  flex-flow: column;
+}
+
+.operators {
+  flex: 1;
+  display: flex;
+  flex-flow: column;
+}
+
+.others {
+  flex: 1;
+
+  display: flex;
+  flex-direction: row;
+}
+
+.numbers { 
+  flex: 4;
+
+  display: flex;
+  flex-direction: column;
+}
+
+[class^="row"] {
+  flex: 1;
+
+  display: flex;
+  flex-direction: row;
+}
+
+.buttons {
+  flex: 5;
+  display: flex;
+}
+
+.button {
+  flex-grow: 1;
+  flex-shrink: 0;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border: 2px solid black;
+  border-radius: 3px;  
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+  margin: 5px;
+
+  font-size: 5vh;
+  /* font-weight: bold; */
+  font-family: "Sono", monospace;
+  font-optical-sizing: auto;
+  font-weight: 300; /* from 200 to 800; */
+  font-style: normal;
+  font-variation-settings:
+    "MONO" 1;
+}
+
+.button:hover {
+  opacity: 0.6;
+}
+
+.button.wide {
+  flex: 2;
+}
+
+.number {
+  background-color: var(--numbers);
+}
+
+.operator {
+  background-color: var(--operators);
+}
+
+.equals {
+  background-color: var(--equals);
+  color: white;
+}
+
+.clear {
+  background-color: var(--warning);
+  color: white;
+}
+
+.other {
+  background-color: var(--other);
+}
