@@ -38,9 +38,9 @@ function setup() {
     
     buttons.forEach((button) => {
         button.addEventListener('click', handleButtonPress);
-        button.addEventListener('keydown', handleButtonPress);
     })
 
+    document.addEventListener('keydown', handleButtonPress);
 }
 
 function debounce(func, delay) {
@@ -52,39 +52,68 @@ function debounce(func, delay) {
       }, delay);
     };
   }
-  
+
+function pretreatKeystroke(type, keystroke) {
+    // keystroke = keystroke.toLowerCase();
+    if (type == 'keydown') {
+        switch (keystroke) {
+            case 'Enter':
+                keystroke = '=';
+                break;
+            case 'Escape':
+                keystroke = 'AC';
+                break;
+            case '^':
+                keystroke = 'EXP';
+                break;
+        }
+    }
+    if (!(keystroke in VALID_KEYSTROKES)) {
+        keystroke = null;
+    }
+    return keystroke;
+}
+
+
 // const handleClick = debounce(function() {
 // // Your click event handling code
-// }, 300); // Set an appropriate delay in milliseconds
 
 const handleButtonPress = debounce(function(event) {
 
-    // if (event.type == 'click') {
-    //     keystroke = event.target.textContent;
-    //     console.log(classes);
-    // } else if (event.type == 'keydown') {
-    //     console.log(event.key)
-    // }
-    keystroke = event.target.textContent;
+    // console.log(event.type); 
 
-    classes = Array.from(event.target.classList);
+    if (event.type == 'click') {
+        keystroke = event.target.textContent;
+    } else if (event.type == 'keydown') {
+        keystroke = event.key;
+    }
+
+    // console.log(`Before pretreatment: keystroke = ${keystroke}`)
+    keystroke = pretreatKeystroke(event.type, keystroke);
+    // console.log(`After pretreatment: keystroke = ${keystroke}`)
+
+    // if the keystroke was invalid, cancel.
+    if (!keystroke) { return; }
+
+    // classes = Array.from(event.target.classList);
+    let type = VALID_KEYSTROKES[keystroke];
     
     console.log(`Before "${keystroke}" button pressed. A = ${A} B = ${B} Oper = ${OPERATOR}, ENTERING_FIRST? ${ENTERING_FIRST_VALUE}`);
 
-    switch (true) {
-        case classes.includes('number'):
+    switch (type) {
+        case 'number':
             handleNumberPress(keystroke);
             break;
-        case classes.includes('operator'):
+        case 'operator':
             handleOperatorPress(keystroke);
             break;
-        case classes.includes('clear'):
+        case 'clear':
             clearScreen();
             break;
-        case classes.includes('equals'):
+        case 'equals':
             handleEqualsPress();
             break;
-        case classes.includes('sign-change'):
+        case 'sign-change':
             handleSignChange();
             break;
     }
@@ -170,6 +199,32 @@ function handleSignChange() {
 
 let A = B = OPERATOR = '';
 let ENTERING_FIRST_VALUE = true;
+// const VALID_KEYSTROKES = new Set([
+//     '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+//     '/', '*', '+', '-', 'EXP', '=',
+//     'AC', '+/-', '.',
+// ])
+const VALID_KEYSTROKES = {
+    '0': 'number',
+    '1': 'number',
+    '2': 'number',
+    '3': 'number',
+    '4': 'number',
+    '5': 'number',
+    '6': 'number',
+    '7': 'number',
+    '8': 'number',
+    '9': 'number',
+    '/': 'operator',
+    '*': 'operator',
+    '+': 'operator',
+    '-': 'operator',
+    'EXP': 'operator',
+    '=': 'equals',
+    'AC': 'clear',
+    '+/-': 'sign-change',
+    '.': 'number',
+  };
 
 let DISPLAY = document.querySelector('.display.main');
 let AUX = document.querySelector('.display.aux');
