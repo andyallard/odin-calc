@@ -127,7 +127,7 @@ const handleButtonPress = debounce(function(event) {
     // If there's been an error, do nothing  until user resets
     if (ERROR && type != 'clear') { return; }
     
-    console.log(`Before "${keystroke}" button pressed. A = ${A} B = ${B} Oper = ${OPERATOR}, ENTERING_FIRST? ${ENTERING_FIRST_VALUE}`);
+    // console.log(`Before "${keystroke}" button pressed. A = ${A} B = ${B} Oper = ${OPERATOR}, ENTERING_FIRST? ${ENTERING_FIRST_VALUE}`);
 
     switch (type) {
         case 'number':
@@ -147,14 +147,14 @@ const handleButtonPress = debounce(function(event) {
             break;
     }
 
-    // if result gets bigger than 12 digits, show overflow error
-    if (A > 999999999999) {
+    // if result gets bigger than MAX_DIGITS digits, show overflow error
+    if (A > (10 ** (MAX_DIGITS + 1)) - 1) {
         ERROR = 'ERR: OVERFLOW';
     }
 
-    A = setMaxDigits(A, 12);
+    A = setMaxDigits(A, MAX_DIGITS);
 
-    console.log(`After "${keystroke}" button pressed. A = ${A} B = ${B} Oper = ${OPERATOR}, ENTERING_FIRST? ${ENTERING_FIRST_VALUE}`);
+    // console.log(`After "${keystroke}" button pressed. A = ${A} B = ${B} Oper = ${OPERATOR}, ENTERING_FIRST? ${ENTERING_FIRST_VALUE}`);
 
     // update auxiliary display
     if (ENTERING_FIRST_VALUE) {
@@ -183,7 +183,7 @@ function handleNumberPress(keystroke) {
     if (!ENTERING_FIRST_VALUE && !OPERATOR) { return; }
     
     // display only has so much space
-    if (DISPLAY.textContent.length >= 12) { return; }
+    if (DISPLAY.textContent.length >= MAX_DIGITS) { return; }
 
     if (DISPLAY.textContent == '0' && keystroke != '.') {
         DISPLAY.textContent = keystroke;
@@ -246,11 +246,8 @@ function handleSignChange() {
 let A = B = OPERATOR = '';
 let ERROR = '';
 let ENTERING_FIRST_VALUE = true;
-// const VALID_KEYSTROKES = new Set([
-//     '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-//     '/', '*', '+', '-', 'EXP', '=',
-//     'AC', '+/-', '.',
-// ])
+const MAX_DIGITS = 13;
+
 const VALID_KEYSTROKES = {
     '0': 'number',
     '1': 'number',

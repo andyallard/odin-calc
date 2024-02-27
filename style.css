@@ -59,7 +59,7 @@ body {
 
   min-height: 6vh;
 
-  font-size: 5vh;
+  font-size: 4.5vh;
   font-family: "Orbitron", sans-serif;
   font-optical-sizing: auto;
   font-weight: 300;
@@ -183,5 +183,4 @@ body {
     font-size: 4vh;
     min-height: 5vh;
   }
-}
 }
