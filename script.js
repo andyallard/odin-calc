@@ -10,6 +10,9 @@ function multiply(a, b) {
     return a * b;
 }
 function divide(a, b) {
+    if (b == 0) {
+        ERROR = 'ERR: DIV BY 0';
+    }
     return a / b;
 }
 function exponent(a, b) {
@@ -41,6 +44,22 @@ function setup() {
     })
 
     document.addEventListener('keydown', handleButtonPress);
+}
+
+function setMaxDigits(num, maxDigits) {
+    // remove decimal, convert to string to see length, and use it to decide how much to round to keep the number within maxDigits
+    num = parseFloat(num);
+    numPart = Math.floor(num);
+    decimalPart = num - numPart;
+
+    round = maxDigits - String(numPart).length;
+    
+    // if number is too big, round it
+    if (round < String(decimalPart).length) {
+        num = Math.round(num * (10 ** round)) / (10 ** round);
+    }
+    return num;
+
 }
 
 function debounce(func, delay) {
@@ -79,12 +98,18 @@ function pretreatKeystroke(type, keystroke) {
 // // Your click event handling code
 
 const handleButtonPress = debounce(function(event) {
-
     // console.log(event.type); 
+    
+    event.preventDefault();
 
     if (event.type == 'click') {
         keystroke = event.target.textContent;
     } else if (event.type == 'keydown') {
+        if (event.key == '/') {
+            // console.log('/');
+            event.preventDefault();
+        }
+        console.log(event.key);
         keystroke = event.key;
     }
 
@@ -97,6 +122,10 @@ const handleButtonPress = debounce(function(event) {
 
     // classes = Array.from(event.target.classList);
     let type = VALID_KEYSTROKES[keystroke];
+
+    
+    // If there's been an error, do nothing  until user resets
+    if (ERROR && type != 'clear') { return; }
     
     console.log(`Before "${keystroke}" button pressed. A = ${A} B = ${B} Oper = ${OPERATOR}, ENTERING_FIRST? ${ENTERING_FIRST_VALUE}`);
 
@@ -118,12 +147,25 @@ const handleButtonPress = debounce(function(event) {
             break;
     }
 
+    // if result gets bigger than 12 digits, show overflow error
+    if (A > 999999999999) {
+        ERROR = 'ERR: OVERFLOW';
+    }
+
+    A = setMaxDigits(A, 12);
+
     console.log(`After "${keystroke}" button pressed. A = ${A} B = ${B} Oper = ${OPERATOR}, ENTERING_FIRST? ${ENTERING_FIRST_VALUE}`);
 
+    // update auxiliary display
     if (ENTERING_FIRST_VALUE) {
         AUX.textContent = ``
     } else {
         AUX.textContent = `${A} ${OPERATOR}`
+    }
+
+    if (ERROR) {
+        AUX.textContent = 'PLEASE RESET';
+        DISPLAY.textContent = ERROR;
     }
 
 }, 10);
@@ -158,6 +200,9 @@ function handleNumberPress(keystroke) {
 
 function handleOperatorPress(keystroke) {
     if (ENTERING_FIRST_VALUE) {
+        if (!A) {
+            A = 0;
+        }
         OPERATOR = keystroke;
         ENTERING_FIRST_VALUE = false;
         DISPLAY.textContent = '';
@@ -174,6 +219,7 @@ function clearScreen() {
     DISPLAY.textContent = '0';
     A = B = OPERATOR = '';
     ENTERING_FIRST_VALUE = true;
+    ERROR = '';
 }
 
 function handleEqualsPress() {
@@ -198,6 +244,7 @@ function handleSignChange() {
 }
 
 let A = B = OPERATOR = '';
+let ERROR = '';
 let ENTERING_FIRST_VALUE = true;
 // const VALID_KEYSTROKES = new Set([
 //     '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',

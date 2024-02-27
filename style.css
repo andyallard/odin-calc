@@ -28,9 +28,11 @@ body {
   margin: auto;
   padding: 15px;
   background-color: var(--light);
+  min-width: 300px;
   max-width: 480px;
 
   height: 100vh;
+  min-height: 400px;
   max-height: 720px;
 }
 
@@ -117,7 +119,7 @@ body {
   border: 2px solid black;
   border-radius: 3px;  
   box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
-  margin: 5px;
+  margin: 0.75vh;
 
   font-size: 5vh;
   /* font-weight: bold; */
